@@ -1,0 +1,8 @@
+node_modules/
+.superpowers/
+*.tgz
+.env
+.env.*
+!.env.example
+summary-model.json
+coverage/
