@@ -1,0 +1,30 @@
+{
+  "name": "pi-summary-model",
+  "version": "0.1.0",
+  "description": "Use a fixed dedicated model for native Pi compaction",
+  "type": "module",
+  "license": "MIT",
+  "keywords": ["pi-package"],
+  "engines": { "node": ">=22" },
+  "files": ["src", "README.md", "LICENSE"],
+  "pi": { "extensions": ["./src/index.ts"] },
+  "scripts": {
+    "test": "tsx --test tests/*.test.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-ai": "*",
+    "@earendil-works/pi-coding-agent": "*"
+  },
+  "peerDependenciesMeta": {
+    "@earendil-works/pi-ai": { "optional": true },
+    "@earendil-works/pi-coding-agent": { "optional": true }
+  },
+  "devDependencies": {
+    "@earendil-works/pi-ai": "0.86.0",
+    "@earendil-works/pi-coding-agent": "0.86.0",
+    "@types/node": "^22.19.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.3"
+  }
+}
