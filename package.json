@@ -5,8 +5,9 @@
   "type": "module",
   "license": "MIT",
   "keywords": ["pi-package"],
-  "engines": { "node": ">=22" },
-  "files": ["src", "README.md", "LICENSE"],
+  "engines": { "node": ">=22.19.0" },
+  "repository": { "type": "git", "url": "https://github.com/loneshu7/pi-summary-model.git" },
+  "files": ["src", "README.md", "LICENSE", "docs/design.md", "docs/validation.md"],
   "pi": { "extensions": ["./src/index.ts"] },
   "scripts": {
     "test": "tsx --test tests/*.test.ts",

@@ -12,7 +12,7 @@
 
 ## Global Constraints
 
-- Target Pi 0.86.0 and Node >=22.
+- Target Pi 0.86.0 and Node >=22.19.0 (Pi's minimum).
 - Conversation model never changes. No cross-provider/account retry on errors.
 - Credentials are managed by Pi, never copied or logged.
 - Errors return cancel:true from the hook; no silent default compaction fallback.
