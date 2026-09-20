@@ -26,6 +26,8 @@ for (const reason of ["manual", "threshold", "overflow"] as const) {
       assert.equal(call.model, target);
       assert.equal(call.options?.signal, input.signal);
       assert.equal(call.options?.maxRetries, 0);
+      assert.equal(call.options?.transport, "sse");
+      assert.equal(typeof call.options?.fetch, "function");
       assert.equal(call.options?.cacheRetention, "none");
       assert.ok(call.options?.sessionId);
       assert.equal(call.options?.apiKey, undefined);

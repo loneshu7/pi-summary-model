@@ -2,6 +2,7 @@ import { createAssistantMessageEventStream, type AssistantMessage } from "@earen
 import { compact, type ExtensionContext, type SessionBeforeCompactEvent } from "@earendil-works/pi-coding-agent";
 import type { SummaryModelConfig } from "./config.ts";
 import { SummaryModelError, providerError } from "./errors.ts";
+import { observeResponses } from "./protocol.ts";
 
 type Registry = ExtensionContext["modelRegistry"];
 export function resolveTarget(config: SummaryModelConfig, registry: Registry) {
@@ -62,15 +63,19 @@ export async function compactWithTarget(event: SessionBeforeCompactEvent, ctx: E
   const streamFn: NonNullable<Parameters<typeof compact>[7]> = async (_requestedModel, transcript, options) => {
     checkAbort(event.signal);
     let status: number | undefined;
+    const observer = ["openai-responses", "openai-codex-responses", "azure-openai-responses"].includes(model.api)
+      ? observeResponses(options?.fetch) : undefined;
     try {
       // TranscriptContext is already normalized, and its messages structurally satisfy
       // registry Context. Retain its system messages rather than rebuilding a prompt.
       // Registry owns request-time auth/OAuth refresh; do not resolve or inject credentials.
       const source = ctx.modelRegistry.streamSimple(model, { messages: transcript.messages }, {
-        ...options, signal: event.signal, maxRetries: 0,
+        ...options, signal: event.signal, maxRetries: 0, transport: "sse",
+        ...(observer ? { fetch: observer.fetch } : {}),
         onResponse: (response) => { status = response.status; },
       });
       const message = await abortable(source.result(), event.signal);
+      observer?.check();
       validateResponse(message, event.signal, status);
       // compact() awaits result(). Only validated messages can cross this boundary.
       const validated = createAssistantMessageEventStream();
@@ -79,6 +84,7 @@ export async function compactWithTarget(event: SessionBeforeCompactEvent, ctx: E
       return validated;
     } catch (error) {
       checkAbort(event.signal);
+      observer?.check();
       if (error instanceof SummaryModelError) throw error;
       throw providerError(error, status);
     }
