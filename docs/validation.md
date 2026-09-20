@@ -4,7 +4,7 @@
 
 ## 自动化与打包检查
 
-- `npm test`：46 项通过，0 失败；包含 3 种压缩触发原因、拆分摘要逐响应校验、连续压缩文件记录、取消、配置损坏和多进程配置写入。
+- `npm test`：76 项通过，0 失败；包含 3 种压缩触发原因、拆分摘要逐响应校验、连续压缩文件记录、取消、配置损坏和多进程配置写入，以及真实 Responses/Codex provider 的本地协议回归。
 - `npm run typecheck`：通过。
 - Pi 原生包发现和 TypeScript 加载：通过。
 - `npm pack` 后解包至不含 node_modules 的临时目录，使用本机 Pi 加载扩展：通过。
@@ -27,7 +27,7 @@
 {
   "live": "passed",
   "calls": ["openai-codex/gpt-5.6-sol"],
-  "summaryCharacters": 772,
+  "summaryCharacters": 737,
   "preservedBoundary": true,
   "mainModelUnchanged": true,
   "usagePresent": true
@@ -35,3 +35,5 @@
 ```
 
 没有读取或重发历史拒绝会话。临时测试配置已删除；认证由 Pi 模型运行时处理。上述实测验证的是扩展钩子到服务的链路，不等同于在真实超长会话中触发自动压缩的端到端测试。
+
+实际订阅检查在 SSE/结构化拒绝修复后再次执行，结果如上。新增 30 项协议测试覆盖增量和最终拒绝事件、流末尾、分片 UTF-8/CRLF、取消与读取失败、单帧上限，以及 Codex 连接错误和 HTTP 503 不重发。拒绝数据来自本地合成服务，未使用用户历史。
