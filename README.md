@@ -16,7 +16,6 @@
 pi install git:github.com/loneshu7/pi-summary-model
 ```
 
-私有仓库需要本机 Git 具备访问权限。也可以在克隆仓库后安装绝对路径：
 
 ```sh
 pi install /absolute/path/to/pi-summary-model
